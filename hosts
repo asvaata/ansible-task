@@ -1,0 +1,2 @@
+[nginx]
+nginx ansible_host=94.247.135.52 ansible_ssh_user=root
