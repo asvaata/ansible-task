@@ -1,0 +1,11 @@
+---
+
+  - name: Restart nginx
+    service: name=nginx state=restarted
+
+  - name: Restart php-fpm
+    service: name=php-fpm state=restarted
+
+  - name: Restart rsyslog
+    service: name=rsyslog state=restarted
+

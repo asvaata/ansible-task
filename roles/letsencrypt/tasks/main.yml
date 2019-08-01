@@ -1,0 +1,27 @@
+---
+
+  - name: Install certbot
+    yum:
+      name:
+        - certbot
+
+  - name: Create domain directory
+    file:
+      name: /var/www/{{ domain_name }}
+      state: directory
+
+  - name: Create letsencrypt certificate
+    shell: certbot certonly -n --webroot -w /var/www/{{ domain_name }} -m {{ email }} --agree-tos -d {{ domain_name }}
+    args:
+      creates: /etc/letsencrypt/live/{{ domain_name }}
+
+  - name: Generate dhparams
+    shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+    args:
+      creates: /etc/nginx/dhparams.pem
+
+  - name: Copy ssl additionally options file for nginx
+    copy:
+      src: options-ssl-nginx.conf
+      dest: /etc/nginx/
+

@@ -1,0 +1,30 @@
+---
+
+  - name: Allow nginx to listen on tcp port 7080 and 7443
+    seport:
+      ports: 7080,7443
+      proto: tcp
+      setype: http_port_t
+      state: present
+
+  - name: firewall add https
+    firewalld:
+      service: https
+      permanent: yes
+      state: enabled
+  - name: firewall add http
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+  - name: firewall add 7080
+    firewalld:
+      port: 7080/tcp
+      permanent: yes
+      state: enabled
+  - name: firewall add 7443
+    firewalld:
+      port: 7443/tcp
+      permanent: yes
+      state: enabled
+

@@ -1,0 +1,24 @@
+---
+
+  - name: Configure firewalld and selinux for web access
+    hosts: webSrv
+
+
+    roles:
+      - security
+
+
+  - name: Generate new ssl and dhparam for domain via letsencrypt
+    hosts: webSrv
+
+
+    roles:
+      - letsencrypt
+
+
+  - name: Configure nginx
+    hosts: webSrv
+
+
+    roles:
+      - nginx
