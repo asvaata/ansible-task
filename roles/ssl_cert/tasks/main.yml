@@ -1,0 +1,52 @@
+---
+
+  - name: Install epel-release
+    yum:
+      name: epel-release 
+
+  - name: Install pip
+    yum:
+      name:
+        - python-pip
+
+  - pip:
+      name: PyOpenSSL
+
+  - name: Create dirs for ssl key's and main dir for site
+    file:
+      path: /etc/ssl/csr
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - '/etc/ssl/csr'
+      - '/etc/ssl/private'
+      - '/etc/ssl/crt'
+      - '/var/www/{{ domain_name }}'
+  
+  - name: Generate private_key
+    openssl_privatekey:
+      path: /etc/ssl/private/{{ domain_name }}.private.pem
+
+  - name: Generate csr
+    openssl_csr:
+     path: /etc/ssl/csr/{{ domain_name }}.csr
+     privatekey_path: /etc/ssl/private/{{ domain_name }}.private.pem
+     common_name: "{{ domain_name }}"
+
+  - name: Generate selfsign cert
+    openssl_certificate:
+      path: /etc/ssl/crt/{{ domain_name }}.fullchain.pem
+      privatekey_path: /etc/ssl/private/{{ domain_name }}.private.pem
+      csr_path: /etc/ssl/csr/{{ domain_name }}.csr
+      provider: selfsigned
+
+  - name: Generate dhparams
+    shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+    args:
+      creates: /etc/nginx/dhparams.pem
+
+  - name: Copy ssl additionally options file for nginx
+    copy:
+      src: options-ssl-nginx.conf
+      dest: /etc/nginx/
+

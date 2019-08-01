@@ -13,7 +13,7 @@
 
 
     roles:
-      - letsencrypt
+      - ssl_cert
 
 
   - name: Configure nginx

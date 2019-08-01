@@ -1,5 +1,5 @@
 ---
-  - name: Install python lib
+  - name: Install python lib for selinux support
     yum:
       name:
         - policycoreutils-python
@@ -12,26 +12,23 @@
       setype: http_port_t
       state: present
 
-  - name: firewall add https
+  - name: Firewall add services http and https
     firewalld:
-      service: https
+      service: "{{ item }}"
       permanent: yes
       state: enabled
-  - name: firewall add http
+    with_items:
+      - https
+      - http
+
+  - name: Firewall add ports 7080 and 7443
     firewalld:
-      service: http
+      port: "{{ item }}"
       permanent: yes
       state: enabled
-  - name: firewall add 7080
-    firewalld:
-      port: 7080/tcp
-      permanent: yes
-      state: enabled
-  - name: firewall add 7443
-    firewalld:
-      port: 7443/tcp
-      permanent: yes
-      state: enabled
+    with_items:
+      - '7080/tcp'
+      - '7443/tcp'  
     notify:
       - Reload firewall
       

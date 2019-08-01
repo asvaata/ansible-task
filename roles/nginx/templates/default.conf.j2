@@ -5,8 +5,8 @@ server {
         root /var/www/{{ domain_name }}/;
         index index.php;
 
-        ssl_certificate /etc/ssl/csr/{{ domain_name }}.csr;
-        ssl_certificate_key /etc/ssl/private/{{ domain_name }}.pem;
+        ssl_certificate /etc/ssl/crt/{{ domain_name }}.fullchain.pem;
+        ssl_certificate_key /etc/ssl/private/{{ domain_name }}.private.pem;
         include /etc/nginx/options-ssl-nginx.conf;
         ssl_dhparam /etc/nginx/dhparams.pem;
 
@@ -25,8 +25,8 @@ server {
         root /var/www/{{ domain_name }}/;
         index index.php;
 
-	ssl_certificate /etc/ssl/csr/{{ domain_name }}.csr;
-	ssl_certificate_key /etc/ssl/private/{{ domain_name }}.pem;
+	ssl_certificate /etc/ssl/crt/{{ domain_name }}.fullchain.pem;
+	ssl_certificate_key /etc/ssl/private/{{ domain_name }}.private.pem;
         include /etc/nginx/options-ssl-nginx.conf;
         ssl_dhparam /etc/nginx/dhparams.pem;
 

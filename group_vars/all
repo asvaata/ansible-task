@@ -1,4 +1,4 @@
-domain_name: 10.216.129.172
+domain_name: 192.168.122.5
 nginx_url: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
 email: asdmail14@mail.ru
 
