@@ -1,19 +1,68 @@
 ---
 
-  - name: Install certbot
+#- name: Install certbot
+#    yum:
+#      name:
+#        - certbot
+#
+  - name: Install epel-release
+    yum:
+      name: epel-release 
+
+  - name: Install python lib for cryptography
     yum:
       name:
-        - certbot
+        - python-pip
+
+  - pip:
+      name: PyOpenSSL
 
   - name: Create domain directory
     file:
       name: /var/www/{{ domain_name }}
       state: directory
 
-  - name: Create letsencrypt certificate
-    shell: certbot certonly -n --webroot -w /var/www/{{ domain_name }} -m {{ email }} --agree-tos -d {{ domain_name }}
-    args:
-      creates: /etc/letsencrypt/live/{{ domain_name }}
+#- name: Create letsencrypt certificate
+#shell: certbot certonly -n --webroot -w /var/www/{{ domain_name }} -m {{ email }} --agree-tos -d {{ domain_name }}
+#args:
+#creates: /etc/letsencrypt/live/{{ domain_name }}
+
+  - name: Create directory for ssl cert
+    file:
+      path: /etc/ssl/csr
+      state: directory
+  
+  - name: Create directory for private key
+    file: 
+      path: /etc/ssl/private
+      state: directory
+    
+  - name: Create directory for crt    
+    file:
+      path: /etc/ssl/crt
+      state: directory
+
+  - name: Create nginx directory
+    file:
+      path: /etc/nginx
+      state: directory
+
+  - name: Generate private_key
+    openssl_privatekey:
+      path: /etc/ssl/private/{{ domain_name }}.pem
+
+  - name: Generate csr
+    openssl_csr:
+     path: /etc/ssl/csr/{{ domain_name }}.csr
+     privatekey_path: /etc/ssl/private/{{ domain_name }}.pem
+     common_name: "{{ domain_name }}"
+
+  - name: Generate selfsign cert
+    openssl_certificate:
+      path: /etc/ssl/crt/{{ domain_name }}.crt
+      privatekey_path: /etc/ssl/private/{{ domain_name }}.pem
+      csr_path: /etc/ssl/csr/{{ domain_name }}.csr
+      provider: selfsigned
 
   - name: Generate dhparams
     shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048

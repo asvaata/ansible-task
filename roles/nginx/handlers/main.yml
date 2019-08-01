@@ -6,6 +6,4 @@
   - name: Restart php-fpm
     service: name=php-fpm state=restarted
 
-  - name: Restart rsyslog
-    service: name=rsyslog state=restarted
 

@@ -1,2 +1,2 @@
 [webSrv]
-webSrv0 ansible_host=94.247.135.52 ansible_ssh_user=root
+webSrv0 ansible_host=10.216.129.172 ansible_ssh_user=root

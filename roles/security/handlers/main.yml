@@ -1,5 +1,8 @@
 ---
 
-  - name: Reload firewalld
+  - name: Reload firewall
     shell: firewall-cmd --reload
+
+  - name: Restart rsyslog
+    service: name=rsyslog state=restarted
 

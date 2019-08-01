@@ -1,4 +1,9 @@
 ---
+  - name: Install python lib
+    yum:
+      name:
+        - policycoreutils-python
+      state: present
 
   - name: Allow nginx to listen on tcp port 7080 and 7443
     seport:
@@ -27,4 +32,11 @@
       port: 7443/tcp
       permanent: yes
       state: enabled
+    notify:
+      - Reload firewall
+      
+  - name: Add logger host to rsyslog
+    shell: echo "*.* @@10.216.129.25:514" >> /etc/rsyslog.conf
+    notify:
+      - Restart rsyslog
 
